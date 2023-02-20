@@ -8,35 +8,38 @@
 import UIKit
 import SnapKit
 import OpenAISwift
+import MarkdownView
 class ViewController: UIViewController {
-    let openAI = OpenAISwift(authToken: "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")
+    let openAI = OpenAISwift(authToken: "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")
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-
-        openAI.sendCompletion(with: "Swift网络请求", model: .gpt3(.davinci)) { result in // Result<OpenAI, OpenAIError>
-            switch result {
-            case .success(let success):
-                print(success.choices.first?.text ?? "")
-            case .failure(let failure):
-                print(failure.localizedDescription)
-            }
+        let md = AnimatedMarkdownView(coder: NSCoder())
+        view.addSubview(md ?? UIView.init())
+        md?.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(100)
+            make.leading.trailing.equalToSuperview()
         }
+        
+        md?.loadAnimated(markdown: "Swift 网络请求")
 
-//        let demoLab = TypewriterLabel()
-//        demoLab.textColor = .black
-//        demoLab.textAlignment = .center
-//        demoLab.font = .systemFont(ofSize: 16)
-//        self.view.addSubview(demoLab)
-//        demoLab.snp.makeConstraints { make in
-//            make.center.equalToSuperview()
-//            make.width.equalTo(375)
-//            make.height.equalTo(300)
+
+        
+//        openAI.sendCompletion(with: "Swift 网络请求", maxTokens: 1500) { result in // Result<OpenAI, OpenAIError>
+//            switch result {
+//            case .success(let success):
+//                let showText = success.choices.first?.text ?? ""
+//                print(showText)
+//                DispatchQueue.main.async {
+//                    md.load(markdown: showText)
+//                }
+//            case .failure(let failure):
+//                print(failure.localizedDescription)
+//            }
 //        }
     }
-    
     
 
 }

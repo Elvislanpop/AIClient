@@ -14,8 +14,10 @@
 		08528F8829A0CC9A00DA8C89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08528F8729A0CC9A00DA8C89 /* Assets.xcassets */; };
 		08528F8B29A0CC9A00DA8C89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08528F8929A0CC9A00DA8C89 /* LaunchScreen.storyboard */; };
 		08528F9429A0D61A00DA8C89 /* OpenAISwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08528F9329A0D61A00DA8C89 /* OpenAISwift */; };
-		08528F9929A0D80B00DA8C89 /* TypewriterLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08528F9829A0D80B00DA8C89 /* TypewriterLabel.swift */; };
 		08528F9C29A0D89400DA8C89 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 08528F9B29A0D89400DA8C89 /* SnapKit */; };
+		08528FA129A35A7200DA8C89 /* MarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 08528FA029A35A7200DA8C89 /* MarkdownView */; };
+		08528FA529A3709900DA8C89 /* AnimatedMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08528FA429A3709900DA8C89 /* AnimatedMarkdownView.swift */; };
+		08528FA729A3808500DA8C89 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08528FA629A3808500DA8C89 /* TestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +29,8 @@
 		08528F8729A0CC9A00DA8C89 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		08528F8A29A0CC9A00DA8C89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		08528F8C29A0CC9A00DA8C89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		08528F9829A0D80B00DA8C89 /* TypewriterLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypewriterLabel.swift; sourceTree = "<group>"; };
+		08528FA429A3709900DA8C89 /* AnimatedMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedMarkdownView.swift; sourceTree = "<group>"; };
+		08528FA629A3808500DA8C89 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +40,7 @@
 			files = (
 				08528F9429A0D61A00DA8C89 /* OpenAISwift in Frameworks */,
 				08528F9C29A0D89400DA8C89 /* SnapKit in Frameworks */,
+				08528FA129A35A7200DA8C89 /* MarkdownView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,10 +66,11 @@
 		08528F7D29A0CC9800DA8C89 /* AiClient */ = {
 			isa = PBXGroup;
 			children = (
-				08528F9829A0D80B00DA8C89 /* TypewriterLabel.swift */,
 				08528F7E29A0CC9800DA8C89 /* AppDelegate.swift */,
 				08528F8029A0CC9800DA8C89 /* SceneDelegate.swift */,
 				08528F8229A0CC9800DA8C89 /* ViewController.swift */,
+				08528FA429A3709900DA8C89 /* AnimatedMarkdownView.swift */,
+				08528FA629A3808500DA8C89 /* TestView.swift */,
 				08528F8429A0CC9800DA8C89 /* Main.storyboard */,
 				08528F8729A0CC9A00DA8C89 /* Assets.xcassets */,
 				08528F8929A0CC9A00DA8C89 /* LaunchScreen.storyboard */,
@@ -93,6 +98,7 @@
 			packageProductDependencies = (
 				08528F9329A0D61A00DA8C89 /* OpenAISwift */,
 				08528F9B29A0D89400DA8C89 /* SnapKit */,
+				08528FA029A35A7200DA8C89 /* MarkdownView */,
 			);
 			productName = AiClient;
 			productReference = 08528F7B29A0CC9800DA8C89 /* AiClient.app */;
@@ -125,6 +131,7 @@
 			packageReferences = (
 				08528F9229A0D61A00DA8C89 /* XCRemoteSwiftPackageReference "OpenAISwift" */,
 				08528F9A29A0D89400DA8C89 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				08528F9F29A35A7200DA8C89 /* XCRemoteSwiftPackageReference "MarkdownView" */,
 			);
 			productRefGroup = 08528F7C29A0CC9800DA8C89 /* Products */;
 			projectDirPath = "";
@@ -154,9 +161,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				08528F8329A0CC9800DA8C89 /* ViewController.swift in Sources */,
+				08528FA729A3808500DA8C89 /* TestView.swift in Sources */,
 				08528F7F29A0CC9800DA8C89 /* AppDelegate.swift in Sources */,
+				08528FA529A3709900DA8C89 /* AnimatedMarkdownView.swift in Sources */,
 				08528F8129A0CC9800DA8C89 /* SceneDelegate.swift in Sources */,
-				08528F9929A0D80B00DA8C89 /* TypewriterLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +400,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		08528F9F29A35A7200DA8C89 /* XCRemoteSwiftPackageReference "MarkdownView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/keitaoouchi/MarkdownView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -404,6 +420,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08528F9A29A0D89400DA8C89 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		08528FA029A35A7200DA8C89 /* MarkdownView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08528F9F29A35A7200DA8C89 /* XCRemoteSwiftPackageReference "MarkdownView" */;
+			productName = MarkdownView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
