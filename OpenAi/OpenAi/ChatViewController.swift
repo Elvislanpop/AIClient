@@ -2,7 +2,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import SnapKit
-
+import OpenAISwift
 class ChatViewController: UIViewController {
     
     let disposeBag = DisposeBag()
@@ -124,5 +124,27 @@ extension ChatViewController: UITextViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0
     }
+    
+    
+//    func requestOpenAIMessage(){
+//        let openAI = OpenAISwift(authToken: openAiKey)
+//
+//        openAI.sendCompletion(with: textView.text, maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
+//            switch result {
+//            case .success(let success):
+//                let text = success.choices.first?.text ?? ""
+//                print(text)
+//                DispatchQueue.main.async {
+//                    self.makrView.markdownText = text
+//                }
+//            case .failure(let failure):
+//                print(failure.localizedDescription)
+//
+//                DispatchQueue.main.async {
+//                    self.makrView.markdownText = failure.localizedDescription
+//                }
+//            }
+//        }
+//    }
 }
 

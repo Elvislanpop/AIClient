@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 // 屏幕尺寸
 let KScreenWidth = UIScreen.main.bounds.size.width
 let KScreenHeight = UIScreen.main.bounds.size.height
@@ -46,3 +47,7 @@ let KTabBarHeight: CGFloat = KIsIPhoneXSeries ? 83.0 : 49.0
 
 // 底部安全区域高度
 let KSafeAreaBottomHeight: CGFloat = KIsIPhoneXSeries ? 34.0 : 0.0
+
+let openAiKey = "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"
+
+let maxToken = 1288
