@@ -34,6 +34,7 @@ class ChatViewController: UIViewController {
         let image = UIImage(systemName: "paperplane", withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
         button.rx.tap.withUnretained(self).subscribe(onNext: { _ in
+
             self.requestOpenAIMessage()
             
         }).disposed(by: disposeBag)
@@ -148,25 +149,48 @@ class ChatViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
+    
+
 }
 
 extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-//        let emptyDataView = EmptyDataView(frame: tableView.bounds)
-//        tableView.backgroundView = emptyDataView
-//        tableView.separatorStyle = .none
+        if let loadedData = UserDefaultsManager.shared.load() {
+            if loadedData.isEmpty {
+                // 如果数据为空，则显示缺省图
+                let noDataView = EmptyDataView(frame: tableView.bounds)
+                tableView.backgroundView = noDataView
+                tableView.separatorStyle = .none
+                return 0
+            } else {
+                // 如果数据不为空，则取消显示缺省图
+                tableView.backgroundView = nil
+                tableView.separatorStyle = .singleLine
+                return loadedData.count
+            }
+        }
+        let noDataView = EmptyDataView(frame: tableView.bounds)
+        tableView.backgroundView = noDataView
+        tableView.separatorStyle = .none
         return 0
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0{
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "RequestCell") else { return UITableViewCell.init() }
+
+        if indexPath.row == 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RequestCell", for: indexPath) as! RequestCell
+            if let loadedData = UserDefaultsManager.shared.load() {
+                cell.model = loadedData[indexPath.row]
+            }
             return cell
         }
         else{
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ResponseCell") else { return UITableViewCell.init() }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ResponseCell", for: indexPath) as! ResponseCell
+            if let loadedData = UserDefaultsManager.shared.load() {
+                cell.model = loadedData[indexPath.row]
+            }
             return cell
         }
     }
@@ -184,15 +208,17 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
             case .success(let success):
                 let text = success.choices.first?.text ?? ""
                 print(text)
-//                DispatchQueue.main.async {
-//                    self.makrView.markdownText = text
-//                }
+                let data = SaveModel(question: self.textView.text, answer: text, creatTime: String.DateToString())
+                UserDefaultsManager.shared.save(array: [data])
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             case .failure(let failure):
                 print(failure.localizedDescription)
 
-                DispatchQueue.main.async {
+//                DispatchQueue.main.async {
 //                    self.makrView.markdownText = failure.localizedDescription
-                }
+//                }
             }
         }
     }

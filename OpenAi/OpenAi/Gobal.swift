@@ -48,6 +48,6 @@ let KTabBarHeight: CGFloat = KIsIPhoneXSeries ? 83.0 : 49.0
 // 底部安全区域高度
 let KSafeAreaBottomHeight: CGFloat = KIsIPhoneXSeries ? 34.0 : 0.0
 
-let openAiKey = "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"
+let openAiKey = "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"
 
 let maxToken = 1288

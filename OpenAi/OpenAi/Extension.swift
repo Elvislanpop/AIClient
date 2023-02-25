@@ -25,3 +25,10 @@ extension UIColor {
         )
     }
 }
+extension String {
+    static func DateToString(from date: Date = Date(), format: String = "yyyy-MM-dd") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: date)
+    }
+}

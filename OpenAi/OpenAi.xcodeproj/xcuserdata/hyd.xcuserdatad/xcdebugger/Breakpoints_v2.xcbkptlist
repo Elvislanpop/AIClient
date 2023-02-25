@@ -3,22 +3,4 @@
    uuid = "98AA29DA-FBA6-4CEF-8D7A-F6EBB69B508C"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "997268F3-CE97-47E2-B58A-9F4AE698E1E1"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../Library/Developer/Xcode/DerivedData/OpenAi-frjhghuebchujneuvqvnrodqoyph/SourcePackages/checkouts/OpenAISwift/Sources/OpenAISwift/OpenAISwift.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "sendCompletion(with:model:maxTokens:completionHandler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>
