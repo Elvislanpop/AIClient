@@ -23,7 +23,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // Create a ChatViewController instance and set it as the root view controller of the window.
         let chatViewController = ChatViewController()
-        window.rootViewController = chatViewController
+        
+        let nav = UINavigationController(rootViewController: chatViewController)
+        window.rootViewController = nav
         
         // Make the window visible.
         window.makeKeyAndVisible()

@@ -15,8 +15,12 @@
 		08435D5129A49CBD007727F2 /* Down in Frameworks */ = {isa = PBXBuildFile; productRef = 08435D5029A49CBD007727F2 /* Down */; };
 		08435D5329A4A22D007727F2 /* MarkDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08435D5229A4A22D007727F2 /* MarkDownView.swift */; };
 		08435D5629A4A25D007727F2 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 08435D5529A4A25D007727F2 /* SnapKit */; };
-		08435D5929A4ADAC007727F2 /* OpenAISwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08435D5829A4ADAC007727F2 /* OpenAISwift */; };
 		08435D5B29A5EB32007727F2 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08435D5A29A5EB32007727F2 /* ResponseModel.swift */; };
+		088CBBE229A9DE090099DB30 /* EmptyDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CBBE129A9DE090099DB30 /* EmptyDataView.swift */; };
+		088CBBE529A9E0410099DB30 /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CBBE429A9E0410099DB30 /* RequestCell.swift */; };
+		088CBBE729A9E3100099DB30 /* ResponseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CBBE629A9E3100099DB30 /* ResponseCell.swift */; };
+		088CBBEA29A9EBC80099DB30 /* SaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CBBE929A9EBC80099DB30 /* SaveModel.swift */; };
+		088CBC0A29A9FF690099DB30 /* OpenAISwift in Frameworks */ = {isa = PBXBuildFile; productRef = 088CBC0929A9FF690099DB30 /* OpenAISwift */; };
 		08CF9E6F29A8A40C00360320 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 08CF9E6E29A8A40C00360320 /* RxBlocking */; };
 		08CF9E7129A8A40C00360320 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 08CF9E7029A8A40C00360320 /* RxCocoa */; };
 		08CF9E7329A8A40C00360320 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 08CF9E7229A8A40C00360320 /* RxRelay */; };
@@ -36,6 +40,10 @@
 		08435D4929A49B82007727F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		08435D5229A4A22D007727F2 /* MarkDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkDownView.swift; sourceTree = "<group>"; };
 		08435D5A29A5EB32007727F2 /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
+		088CBBE129A9DE090099DB30 /* EmptyDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataView.swift; sourceTree = "<group>"; };
+		088CBBE429A9E0410099DB30 /* RequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
+		088CBBE629A9E3100099DB30 /* ResponseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseCell.swift; sourceTree = "<group>"; };
+		088CBBE929A9EBC80099DB30 /* SaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveModel.swift; sourceTree = "<group>"; };
 		08CF9E7629A8A44400360320 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		08CF9E7829A8AA1C00360320 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		08CF9E7A29A8AD5400360320 /* Gobal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gobal.swift; sourceTree = "<group>"; };
@@ -50,9 +58,9 @@
 				08435D5129A49CBD007727F2 /* Down in Frameworks */,
 				08CF9E6F29A8A40C00360320 /* RxBlocking in Frameworks */,
 				08CF9E7129A8A40C00360320 /* RxCocoa in Frameworks */,
-				08435D5929A4ADAC007727F2 /* OpenAISwift in Frameworks */,
 				08435D5629A4A25D007727F2 /* SnapKit in Frameworks */,
 				08CF9E7529A8A40C00360320 /* RxSwift in Frameworks */,
+				088CBC0A29A9FF690099DB30 /* OpenAISwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,9 +89,9 @@
 				08435D3B29A49B82007727F2 /* AppDelegate.swift */,
 				08435D3D29A49B82007727F2 /* SceneDelegate.swift */,
 				08CF9E7629A8A44400360320 /* ChatViewController.swift */,
-				08435D5229A4A22D007727F2 /* MarkDownView.swift */,
+				088CBBE829A9EAA50099DB30 /* Model */,
+				088CBBE329A9E0280099DB30 /* View */,
 				08CF9E7A29A8AD5400360320 /* Gobal.swift */,
-				08435D5A29A5EB32007727F2 /* ResponseModel.swift */,
 				08CF9E7829A8AA1C00360320 /* Extension.swift */,
 				08435D4129A49B82007727F2 /* Main.storyboard */,
 				08435D4429A49B82007727F2 /* Assets.xcassets */,
@@ -91,6 +99,26 @@
 				08435D4929A49B82007727F2 /* Info.plist */,
 			);
 			path = OpenAi;
+			sourceTree = "<group>";
+		};
+		088CBBE329A9E0280099DB30 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				08435D5229A4A22D007727F2 /* MarkDownView.swift */,
+				088CBBE129A9DE090099DB30 /* EmptyDataView.swift */,
+				088CBBE429A9E0410099DB30 /* RequestCell.swift */,
+				088CBBE629A9E3100099DB30 /* ResponseCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		088CBBE829A9EAA50099DB30 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				08435D5A29A5EB32007727F2 /* ResponseModel.swift */,
+				088CBBE929A9EBC80099DB30 /* SaveModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,11 +140,11 @@
 			packageProductDependencies = (
 				08435D5029A49CBD007727F2 /* Down */,
 				08435D5529A4A25D007727F2 /* SnapKit */,
-				08435D5829A4ADAC007727F2 /* OpenAISwift */,
 				08CF9E6E29A8A40C00360320 /* RxBlocking */,
 				08CF9E7029A8A40C00360320 /* RxCocoa */,
 				08CF9E7229A8A40C00360320 /* RxRelay */,
 				08CF9E7429A8A40C00360320 /* RxSwift */,
+				088CBC0929A9FF690099DB30 /* OpenAISwift */,
 			);
 			productName = OpenAi;
 			productReference = 08435D3829A49B82007727F2 /* OpenAi.app */;
@@ -149,8 +177,8 @@
 			packageReferences = (
 				08435D4F29A49CBD007727F2 /* XCRemoteSwiftPackageReference "Down" */,
 				08435D5429A4A25D007727F2 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				08435D5729A4ADAC007727F2 /* XCRemoteSwiftPackageReference "OpenAISwift" */,
 				08CF9E6D29A8A40C00360320 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				088CBC0829A9FF690099DB30 /* XCRemoteSwiftPackageReference "OpenAISwift" */,
 			);
 			productRefGroup = 08435D3929A49B82007727F2 /* Products */;
 			projectDirPath = "";
@@ -179,8 +207,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				088CBBE729A9E3100099DB30 /* ResponseCell.swift in Sources */,
 				08435D3C29A49B82007727F2 /* AppDelegate.swift in Sources */,
+				088CBBE529A9E0410099DB30 /* RequestCell.swift in Sources */,
 				08CF9E7929A8AA1C00360320 /* Extension.swift in Sources */,
+				088CBBE229A9DE090099DB30 /* EmptyDataView.swift in Sources */,
+				088CBBEA29A9EBC80099DB30 /* SaveModel.swift in Sources */,
 				08CF9E7B29A8AD5400360320 /* Gobal.swift in Sources */,
 				08435D3E29A49B82007727F2 /* SceneDelegate.swift in Sources */,
 				08435D5B29A5EB32007727F2 /* ResponseModel.swift in Sources */,
@@ -422,12 +454,12 @@
 				kind = branch;
 			};
 		};
-		08435D5729A4ADAC007727F2 /* XCRemoteSwiftPackageReference "OpenAISwift" */ = {
+		088CBC0829A9FF690099DB30 /* XCRemoteSwiftPackageReference "OpenAISwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adamrushy/OpenAISwift.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 		08CF9E6D29A8A40C00360320 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
@@ -451,9 +483,9 @@
 			package = 08435D5429A4A25D007727F2 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		08435D5829A4ADAC007727F2 /* OpenAISwift */ = {
+		088CBC0929A9FF690099DB30 /* OpenAISwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 08435D5729A4ADAC007727F2 /* XCRemoteSwiftPackageReference "OpenAISwift" */;
+			package = 088CBC0829A9FF690099DB30 /* XCRemoteSwiftPackageReference "OpenAISwift" */;
 			productName = OpenAISwift;
 		};
 		08CF9E6E29A8A40C00360320 /* RxBlocking */ = {

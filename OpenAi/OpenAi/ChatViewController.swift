@@ -33,15 +33,42 @@ class ChatViewController: UIViewController {
         let color = UITraitCollection.current.userInterfaceStyle == .dark ? UIColor.white : UIColor(named: "LightModeColor") ?? UIColor(hex: "#3c3d4a")
         let image = UIImage(systemName: "paperplane", withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
+        button.rx.tap.withUnretained(self).subscribe(onNext: { _ in
+            self.requestOpenAIMessage()
+            
+        }).disposed(by: disposeBag)
         
         return button
     }()
     
+    lazy var tableView:UITableView = {
+        let tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .singleLine
+        tableView.keyboardDismissMode = .onDrag
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.estimatedSectionHeaderHeight = 44
+        tableView.sectionFooterHeight = UITableView.automaticDimension
+        tableView.estimatedSectionFooterHeight = 44
+        tableView.register(RequestCell.self, forCellReuseIdentifier: "RequestCell")
+        tableView.register(ResponseCell.self, forCellReuseIdentifier: "ResponseCell")
+        tableView.showsVerticalScrollIndicator = false
+        tableView.backgroundColor = .clear
+        return tableView
+        
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "GPT-3"
         view.backgroundColor = .white // 设置背景颜色
         view.addSubview(textView)
         view.addSubview(senderBtn)
+        view.addSubview(tableView)
         setupConstraints()
         setupRx()
         
@@ -61,7 +88,7 @@ class ChatViewController: UIViewController {
         }).disposed(by: disposeBag)
         
         toggleThemeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(KStatusBarHeight)
+            make.top.equalToSuperview().offset(200)
             make.leading.equalToSuperview()
             make.width.height.equalTo(44)
         }
@@ -98,7 +125,10 @@ class ChatViewController: UIViewController {
             make.centerY.equalTo(textView)
             make.trailing.equalToSuperview().offset(-12)
         }
-        
+        tableView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(textView.snp.top).offset(-12)
+        }
      
     }
     
@@ -120,31 +150,51 @@ class ChatViewController: UIViewController {
     }
 }
 
-extension ChatViewController: UITextViewDelegate {
+extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+//        let emptyDataView = EmptyDataView(frame: tableView.bounds)
+//        tableView.backgroundView = emptyDataView
+//        tableView.separatorStyle = .none
+        return 0
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0{
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "RequestCell") else { return UITableViewCell.init() }
+            return cell
+        }
+        else{
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ResponseCell") else { return UITableViewCell.init() }
+            return cell
+        }
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0
     }
     
     
-//    func requestOpenAIMessage(){
-//        let openAI = OpenAISwift(authToken: openAiKey)
-//
-//        openAI.sendCompletion(with: textView.text, maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
-//            switch result {
-//            case .success(let success):
-//                let text = success.choices.first?.text ?? ""
-//                print(text)
+    func requestOpenAIMessage(){
+        let openAI = OpenAISwift(authToken: openAiKey)
+
+        openAI.sendCompletion(with: textView.text, maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
+            switch result {
+            case .success(let success):
+                let text = success.choices.first?.text ?? ""
+                print(text)
 //                DispatchQueue.main.async {
 //                    self.makrView.markdownText = text
 //                }
-//            case .failure(let failure):
-//                print(failure.localizedDescription)
-//
-//                DispatchQueue.main.async {
+            case .failure(let failure):
+                print(failure.localizedDescription)
+
+                DispatchQueue.main.async {
 //                    self.makrView.markdownText = failure.localizedDescription
-//                }
-//            }
-//        }
-//    }
+                }
+            }
+        }
+    }
 }
 
