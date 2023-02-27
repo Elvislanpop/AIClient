@@ -59,42 +59,50 @@ class ChatViewController: UIViewController {
         tableView.register(ResponseCell.self, forCellReuseIdentifier: "ResponseCell")
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
         return tableView
         
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "GPT-3"
+        title = "ChatBot"
         view.backgroundColor = .white // 设置背景颜色
+        // 注册键盘弹出和回收的通知
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         view.addSubview(textView)
         view.addSubview(senderBtn)
         view.addSubview(tableView)
         setupConstraints()
         setupRx()
         
-        // 创建一个切换主题的按钮
-        let toggleThemeButton = UIButton(type: .system)
-        toggleThemeButton.setTitle("Mode Change", for: .normal)
-        view.addSubview(toggleThemeButton)
-        toggleThemeButton.rx.tap.subscribe(onNext: {
-            if let keyWindow = UIApplication.shared.keyWindow {
-                if keyWindow.overrideUserInterfaceStyle == .light {
-                    keyWindow.overrideUserInterfaceStyle = .dark
-                } else {
-                    keyWindow.overrideUserInterfaceStyle = .light
-                }
-            }
-            
-        }).disposed(by: disposeBag)
-        
-        toggleThemeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(200)
-            make.leading.equalToSuperview()
-            make.width.height.equalTo(44)
-        }
+//        // 创建一个切换主题的按钮
+//        let toggleThemeButton = UIButton(type: .system)
+//        toggleThemeButton.setTitle("Mode Change", for: .normal)
+//        view.addSubview(toggleThemeButton)
+//        toggleThemeButton.rx.tap.subscribe(onNext: {
+//            if let keyWindow = UIApplication.shared.keyWindow {
+//                if keyWindow.overrideUserInterfaceStyle == .light {
+//                    keyWindow.overrideUserInterfaceStyle = .dark
+//                } else {
+//                    keyWindow.overrideUserInterfaceStyle = .light
+//                }
+//            }
+//
+//        }).disposed(by: disposeBag)
+//
+//        toggleThemeButton.snp.makeConstraints { make in
+//            make.top.equalToSuperview().offset(200)
+//            make.leading.equalToSuperview()
+//            make.width.height.equalTo(44)
+//        }
     }
-    
+    deinit {
+        // 移除键盘弹出和回收的通知
+        NotificationCenter.default.removeObserver(self)
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -113,7 +121,7 @@ class ChatViewController: UIViewController {
             // Fallback on earlier versions
         }
     }
-    
+
     
     func setupConstraints() {
         textView.snp.makeConstraints { make in
@@ -189,10 +197,13 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
         else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "ResponseCell", for: indexPath) as! ResponseCell
             if let loadedData = UserDefaultsManager.shared.load() {
-                cell.model = loadedData[indexPath.row]
+                cell.model = loadedData[indexPath.row - 1]
             }
             return cell
         }
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.view.endEditing(true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -202,15 +213,16 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
     
     func requestOpenAIMessage(){
         let openAI = OpenAISwift(authToken: openAiKey)
-
+        self.view.endEditing(true)
         openAI.sendCompletion(with: textView.text, maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
             switch result {
             case .success(let success):
                 let text = success.choices.first?.text ?? ""
-                print(text)
-                let data = SaveModel(question: self.textView.text, answer: text, creatTime: String.DateToString())
-                UserDefaultsManager.shared.save(array: [data])
+                print("输出结果:\(text)")
+
                 DispatchQueue.main.async {
+                    let data = SaveModel(question: self.textView.text, answer: text, creatTime: String.DateToString())
+                    UserDefaultsManager.shared.save(array: [data])
                     self.tableView.reloadData()
                 }
             case .failure(let failure):
@@ -222,5 +234,31 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
             }
         }
     }
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        if let userInfo = notification.userInfo,
+            let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+            // 计算需要上移的距离
+            let offsetY = keyboardFrame.size.height
+            // 更新视图的约束或frame
+            UIView.animate(withDuration: duration) {
+                // 将整个视图上移
+                self.view.transform = CGAffineTransform(translationX: 0, y: -offsetY)
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        if let userInfo = notification.userInfo,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+            // 更新视图的约束或frame
+            UIView.animate(withDuration: duration) {
+                // 将整个视图还原
+                self.view.transform = .identity
+            }
+        }
+    }
+
 }
 

@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         // Create a ChatViewController instance and set it as the root view controller of the window.
-        let chatViewController = ChatViewController()
+        let chatViewController = TestViewController()
         
         let nav = UINavigationController(rootViewController: chatViewController)
         window.rootViewController = nav

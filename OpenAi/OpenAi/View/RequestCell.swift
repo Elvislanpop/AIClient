@@ -16,18 +16,19 @@ class RequestCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let tipLab = UILabel(frame: .zero)
-        tipLab.backgroundColor = .cyan
         tipLab.text = "Q"
+        tipLab.backgroundColor = .black
         tipLab.textAlignment = .center
         tipLab.textColor = .white
-        tipLab.font = .systemFont(ofSize: 16)
+        tipLab.font = .systemFont(ofSize: 12)
         self.contentView.addSubview(tipLab)
         tipLab.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)
             make.trailing.equalToSuperview().offset(-12)
-            make.width.height.equalTo(44)
+            make.width.height.equalTo(20)
         }
-        tipLab.layer.cornerRadius = 22
+        tipLab.layer.cornerRadius = 10
+        tipLab.layer.masksToBounds = true
         
         
         let contentLab = UILabel(frame: .zero)
