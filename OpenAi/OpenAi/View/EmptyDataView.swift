@@ -28,7 +28,7 @@ class EmptyDataView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.endEditing(true)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 
     }
     override func layoutSubviews() {

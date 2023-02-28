@@ -12,11 +12,8 @@
 		08435D4329A49B82007727F2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08435D4129A49B82007727F2 /* Main.storyboard */; };
 		08435D4529A49B82007727F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08435D4429A49B82007727F2 /* Assets.xcassets */; };
 		08435D4829A49B82007727F2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08435D4629A49B82007727F2 /* LaunchScreen.storyboard */; };
-		08435D5129A49CBD007727F2 /* Down in Frameworks */ = {isa = PBXBuildFile; productRef = 08435D5029A49CBD007727F2 /* Down */; };
-		08435D5329A4A22D007727F2 /* MarkDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08435D5229A4A22D007727F2 /* MarkDownView.swift */; };
 		08435D5629A4A25D007727F2 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 08435D5529A4A25D007727F2 /* SnapKit */; };
 		08435D5B29A5EB32007727F2 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08435D5A29A5EB32007727F2 /* ResponseModel.swift */; };
-		084B6AC529AC9F7B00DD8DA4 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084B6AC429AC9F7B00DD8DA4 /* TestViewController.swift */; };
 		088CBBE229A9DE090099DB30 /* EmptyDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CBBE129A9DE090099DB30 /* EmptyDataView.swift */; };
 		088CBBE529A9E0410099DB30 /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CBBE429A9E0410099DB30 /* RequestCell.swift */; };
 		088CBBE729A9E3100099DB30 /* ResponseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CBBE629A9E3100099DB30 /* ResponseCell.swift */; };
@@ -39,9 +36,7 @@
 		08435D4429A49B82007727F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		08435D4729A49B82007727F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		08435D4929A49B82007727F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		08435D5229A4A22D007727F2 /* MarkDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkDownView.swift; sourceTree = "<group>"; };
 		08435D5A29A5EB32007727F2 /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
-		084B6AC429AC9F7B00DD8DA4 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		088CBBE129A9DE090099DB30 /* EmptyDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataView.swift; sourceTree = "<group>"; };
 		088CBBE429A9E0410099DB30 /* RequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
 		088CBBE629A9E3100099DB30 /* ResponseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseCell.swift; sourceTree = "<group>"; };
@@ -49,6 +44,7 @@
 		08CF9E7629A8A44400360320 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		08CF9E7829A8AA1C00360320 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		08CF9E7A29A8AD5400360320 /* Gobal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gobal.swift; sourceTree = "<group>"; };
+		08F39B9529ADB6B7005C6A23 /* swift-markdown-ui */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swift-markdown-ui"; path = "/Users/hyd/Library/Developer/Xcode/DerivedData/OpenAi-frjhghuebchujneuvqvnrodqoyph/SourcePackages/checkouts/swift-markdown-ui"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +53,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				08CF9E7329A8A40C00360320 /* RxRelay in Frameworks */,
-				08435D5129A49CBD007727F2 /* Down in Frameworks */,
 				08CF9E6F29A8A40C00360320 /* RxBlocking in Frameworks */,
 				08CF9E7129A8A40C00360320 /* RxCocoa in Frameworks */,
 				08435D5629A4A25D007727F2 /* SnapKit in Frameworks */,
@@ -74,6 +69,7 @@
 			children = (
 				08435D3A29A49B82007727F2 /* OpenAi */,
 				08435D3929A49B82007727F2 /* Products */,
+				08F39B9429ADB6B7005C6A23 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,7 +87,6 @@
 				08435D3B29A49B82007727F2 /* AppDelegate.swift */,
 				08435D3D29A49B82007727F2 /* SceneDelegate.swift */,
 				08CF9E7629A8A44400360320 /* ChatViewController.swift */,
-				084B6AC429AC9F7B00DD8DA4 /* TestViewController.swift */,
 				088CBBE829A9EAA50099DB30 /* Model */,
 				088CBBE329A9E0280099DB30 /* View */,
 				08CF9E7A29A8AD5400360320 /* Gobal.swift */,
@@ -108,7 +103,6 @@
 		088CBBE329A9E0280099DB30 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				08435D5229A4A22D007727F2 /* MarkDownView.swift */,
 				088CBBE129A9DE090099DB30 /* EmptyDataView.swift */,
 				088CBBE429A9E0410099DB30 /* RequestCell.swift */,
 				088CBBE629A9E3100099DB30 /* ResponseCell.swift */,
@@ -122,6 +116,14 @@
 				08435D5A29A5EB32007727F2 /* ResponseModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		08F39B9429ADB6B7005C6A23 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				08F39B9529ADB6B7005C6A23 /* swift-markdown-ui */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,7 +143,6 @@
 			);
 			name = OpenAi;
 			packageProductDependencies = (
-				08435D5029A49CBD007727F2 /* Down */,
 				08435D5529A4A25D007727F2 /* SnapKit */,
 				08CF9E6E29A8A40C00360320 /* RxBlocking */,
 				08CF9E7029A8A40C00360320 /* RxCocoa */,
@@ -178,7 +179,6 @@
 			);
 			mainGroup = 08435D2F29A49B82007727F2;
 			packageReferences = (
-				08435D4F29A49CBD007727F2 /* XCRemoteSwiftPackageReference "Down" */,
 				08435D5429A4A25D007727F2 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				08CF9E6D29A8A40C00360320 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				088CBC0829A9FF690099DB30 /* XCRemoteSwiftPackageReference "OpenAISwift" */,
@@ -220,8 +220,6 @@
 				08435D3E29A49B82007727F2 /* SceneDelegate.swift in Sources */,
 				08435D5B29A5EB32007727F2 /* ResponseModel.swift in Sources */,
 				08CF9E7729A8A44400360320 /* ChatViewController.swift in Sources */,
-				084B6AC529AC9F7B00DD8DA4 /* TestViewController.swift in Sources */,
-				08435D5329A4A22D007727F2 /* MarkDownView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,15 +439,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		08435D4F29A49CBD007727F2 /* XCRemoteSwiftPackageReference "Down" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/johnxnguyen/Down.git";
-			requirement = {
-				kind = versionRange;
-				maximumVersion = 0.11.0;
-				minimumVersion = 0.9.0;
-			};
-		};
 		08435D5429A4A25D007727F2 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -477,11 +466,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		08435D5029A49CBD007727F2 /* Down */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08435D4F29A49CBD007727F2 /* XCRemoteSwiftPackageReference "Down" */;
-			productName = Down;
-		};
 		08435D5529A4A25D007727F2 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 08435D5429A4A25D007727F2 /* XCRemoteSwiftPackageReference "SnapKit" */;

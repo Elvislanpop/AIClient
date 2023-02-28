@@ -36,8 +36,23 @@ class UserDefaultsManager {
     private let key = "savedData"
     
     func save(array: [SaveModel]) {
+        var savedData = load() ?? []
+        savedData.append(contentsOf: array)
         do {
-            let encodedData = try JSONEncoder().encode(array)
+            let encodedData = try JSONEncoder().encode(savedData)
+            userDefaults.set(encodedData, forKey: key)
+        } catch {
+            print("Error saving data: \(error.localizedDescription)")
+        }
+    }
+    func replace(saveModel: SaveModel, atIndex index: Int) {
+        var savedData = load() ?? []
+        guard index >= 0 && index < savedData.count else {
+            return
+        }
+        savedData[index] = saveModel
+        do {
+            let encodedData = try JSONEncoder().encode(savedData)
             userDefaults.set(encodedData, forKey: key)
         } catch {
             print("Error saving data: \(error.localizedDescription)")

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -20,9 +19,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
+//        window.backgroundColor = .white
         
         // Create a ChatViewController instance and set it as the root view controller of the window.
-        let chatViewController = TestViewController()
+        let chatViewController = ChatViewController()
         
         let nav = UINavigationController(rootViewController: chatViewController)
         window.rootViewController = nav

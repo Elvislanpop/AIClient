@@ -6,7 +6,8 @@ import OpenAISwift
 class ChatViewController: UIViewController {
     
     let disposeBag = DisposeBag()
-    
+    private var themeButton:UIBarButtonItem!
+    private var dataSource:[SaveModel] = []
     lazy var textView: UITextView = {
         let textView = UITextView()
         textView.isScrollEnabled = false
@@ -34,7 +35,7 @@ class ChatViewController: UIViewController {
         let image = UIImage(systemName: "paperplane", withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
         button.rx.tap.withUnretained(self).subscribe(onNext: { _ in
-
+            
             self.requestOpenAIMessage()
             
         }).disposed(by: disposeBag)
@@ -47,19 +48,13 @@ class ChatViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .singleLine
         tableView.keyboardDismissMode = .onDrag
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-        tableView.estimatedSectionHeaderHeight = 44
-        tableView.sectionFooterHeight = UITableView.automaticDimension
-        tableView.estimatedSectionFooterHeight = 44
         tableView.register(RequestCell.self, forCellReuseIdentifier: "RequestCell")
         tableView.register(ResponseCell.self, forCellReuseIdentifier: "ResponseCell")
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
         return tableView
         
     }()
@@ -68,41 +63,63 @@ class ChatViewController: UIViewController {
         super.viewDidLoad()
         title = "ChatBot"
         view.backgroundColor = .white // 设置背景颜色
-        // 注册键盘弹出和回收的通知
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        configNavColor(Mode: .light)
+        
+        // 创建带图标的按钮
+        let themeImage = UIImage(systemName: "moon.fill")?.withTintColor(UIColor(hex: "#1e1e20"), renderingMode: .alwaysOriginal)
+        let themeButton = UIBarButtonItem(image: themeImage, style: .plain, target: self, action: #selector(toggleTheme))
+        navigationItem.rightBarButtonItem = themeButton
+        self.themeButton = themeButton
+        
         view.addSubview(textView)
         view.addSubview(senderBtn)
         view.addSubview(tableView)
         setupConstraints()
         setupRx()
+        if let loadData = UserDefaultsManager.shared.load() {
+            self.dataSource = loadData
+            self.tableView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                // 在主线程执行的任务
+                print("5 秒后执行")
+                self.scrollToBottom()
+            }
+            
+        }
+
+
+    }
+    func configNavColor(Mode:UIUserInterfaceStyle) {
+        navigationController?.navigationBar.isTranslucent = false
+        // 导航背景色
+        if #available(iOS 13.0, *) {
+            let apperance = UINavigationBarAppearance()
+            apperance.backgroundColor = Mode == .light ? .white : UIColor(hex: "#3c3d4a")
+            // 去除导航栏阴影（如果不设置clear，导航栏底下会有一条阴影线）
+            apperance.titleTextAttributes = [.foregroundColor:(Mode == .light ? .black : UIColor(hex: "#FFFFFF") ), .font:UIFont.systemFont(ofSize: 18)]
+            apperance.shadowColor = UIColor.clear
+            navigationController?.navigationBar.scrollEdgeAppearance = apperance
+            navigationController?.navigationBar.standardAppearance = apperance
+        } else {
+            // Fallback on earlier versions
+            let apperance = UINavigationBar.appearance()
+            apperance.barTintColor = .white
+            apperance.titleTextAttributes = [.foregroundColor:UIColor.black, .font:UIFont.systemFont(ofSize: 18)]
+            apperance.shadowImage = UIImage()
+        }
         
-//        // 创建一个切换主题的按钮
-//        let toggleThemeButton = UIButton(type: .system)
-//        toggleThemeButton.setTitle("Mode Change", for: .normal)
-//        view.addSubview(toggleThemeButton)
-//        toggleThemeButton.rx.tap.subscribe(onNext: {
-//            if let keyWindow = UIApplication.shared.keyWindow {
-//                if keyWindow.overrideUserInterfaceStyle == .light {
-//                    keyWindow.overrideUserInterfaceStyle = .dark
-//                } else {
-//                    keyWindow.overrideUserInterfaceStyle = .light
-//                }
-//            }
-//
-//        }).disposed(by: disposeBag)
-//
-//        toggleThemeButton.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(200)
-//            make.leading.equalToSuperview()
-//            make.width.height.equalTo(44)
-//        }
     }
     deinit {
         // 移除键盘弹出和回收的通知
         NotificationCenter.default.removeObserver(self)
     }
 
+    
+    /// light Model /  Dark Model
+    /// - Parameter previousTraitCollection:
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -110,12 +127,12 @@ class ChatViewController: UIViewController {
             if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
                 ///背景色
                 view.backgroundColor = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#3c3d4a") : .white
-                
                 /// 发送按钮
                 let config = UIImage.SymbolConfiguration(scale: .medium)
                 let color = UITraitCollection.current.userInterfaceStyle == .dark ? UIColor.white : UIColor(named: "LightModeColor") ?? UIColor(hex: "#3c3d4a")
                 let image = UIImage(systemName: "paperplane", withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
                 senderBtn.setImage(image, for: .normal)
+               
             }
         } else {
             // Fallback on earlier versions
@@ -134,8 +151,10 @@ class ChatViewController: UIViewController {
             make.centerY.equalTo(textView)
             make.trailing.equalToSuperview().offset(-12)
         }
+        
         tableView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview()
             make.bottom.equalTo(textView.snp.top).offset(-12)
         }
      
@@ -154,6 +173,7 @@ class ChatViewController: UIViewController {
                     make.height.equalTo(height)
                 }
                 self.textView.isScrollEnabled = height == maxHeight
+                self.senderBtn.isUserInteractionEnabled = text.isEmpty == true ? false : true
             })
             .disposed(by: disposeBag)
     }
@@ -163,41 +183,49 @@ class ChatViewController: UIViewController {
 
 extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        if let loadedData = UserDefaultsManager.shared.load() {
-            if loadedData.isEmpty {
-                // 如果数据为空，则显示缺省图
-                let noDataView = EmptyDataView(frame: tableView.bounds)
-                tableView.backgroundView = noDataView
-                tableView.separatorStyle = .none
-                return 0
-            } else {
-                // 如果数据不为空，则取消显示缺省图
-                tableView.backgroundView = nil
-                tableView.separatorStyle = .singleLine
-                return loadedData.count
-            }
+        if self.dataSource.isEmpty {
+            // 如果数据为空，则显示缺省图
+            let noDataView = EmptyDataView(frame: tableView.bounds)
+            tableView.backgroundView = noDataView
+            tableView.separatorStyle = .none
+            return 0
+        } else {
+            // 如果数据不为空，则取消显示缺省图
+            tableView.backgroundView = nil
+            return dataSource.count
         }
-        let noDataView = EmptyDataView(frame: tableView.bounds)
-        tableView.backgroundView = noDataView
-        tableView.separatorStyle = .none
-        return 0
+
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0.01
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView.init()
+    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.01
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView.init()
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if indexPath.row == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: "RequestCell", for: indexPath) as! RequestCell
             if let loadedData = UserDefaultsManager.shared.load() {
-                cell.model = loadedData[indexPath.row]
+                cell.model = loadedData[indexPath.section]
+                cell.selectionStyle = .none
             }
             return cell
         }
         else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "ResponseCell", for: indexPath) as! ResponseCell
             if let loadedData = UserDefaultsManager.shared.load() {
-                cell.model = loadedData[indexPath.row - 1]
+                cell.model = loadedData[indexPath.section]
+                cell.selectionStyle = .none
             }
             return cell
         }
@@ -214,20 +242,28 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
     func requestOpenAIMessage(){
         let openAI = OpenAISwift(authToken: openAiKey)
         self.view.endEditing(true)
+        let textViewStr = self.textView.text ?? ""
+        self.textView.text = ""
+        let data = SaveModel(question: textViewStr, answer: "正在思考,请稍后...", creatTime: String.DateToString())
+        UserDefaultsManager.shared.save(array: [data])
+        self.reloadNewData()
+        self.senderBtn.isUserInteractionEnabled = false
         openAI.sendCompletion(with: textView.text, maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
             switch result {
             case .success(let success):
                 let text = success.choices.first?.text ?? ""
+                print("prompt:\(textViewStr)")
                 print("输出结果:\(text)")
-
                 DispatchQueue.main.async {
-                    let data = SaveModel(question: self.textView.text, answer: text, creatTime: String.DateToString())
-                    UserDefaultsManager.shared.save(array: [data])
-                    self.tableView.reloadData()
+                    if let loadData = UserDefaultsManager.shared.load() {
+                        let data = SaveModel(question: textViewStr, answer: text, creatTime: String.DateToString())
+                        UserDefaultsManager.shared.replace(saveModel: data, atIndex: loadData.count - 1)
+                    }
+                    self.reloadNewData()
+                    self.senderBtn.isUserInteractionEnabled = true
                 }
             case .failure(let failure):
                 print(failure.localizedDescription)
-
 //                DispatchQueue.main.async {
 //                    self.makrView.markdownText = failure.localizedDescription
 //                }
@@ -235,30 +271,58 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
         }
     }
     
-    @objc func keyboardWillShow(notification: Notification) {
-        if let userInfo = notification.userInfo,
-            let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
-            // 计算需要上移的距离
-            let offsetY = keyboardFrame.size.height
-            // 更新视图的约束或frame
-            UIView.animate(withDuration: duration) {
-                // 将整个视图上移
-                self.view.transform = CGAffineTransform(translationX: 0, y: -offsetY)
+    func reloadNewData(){
+        self.tableView.reloadData()
+        let lastsectionIndex = self.tableView.numberOfSections - 1
+        let lastIndexPath = IndexPath(row: 0, section: lastsectionIndex)
+        self.tableView.scrollToRow(at: lastIndexPath, at: .top, animated: true)
+        
+    }
+    
+ 
+    
+    @objc func toggleTheme() {
+        self.view.endEditing(true)
+        if let keyWindow = UIApplication.shared.keyWindow {
+            if keyWindow.traitCollection.userInterfaceStyle == .dark {
+                keyWindow.overrideUserInterfaceStyle = .light
+                let themeImage = UIImage(systemName: "moon.fill")?.withTintColor(UIColor(hex: "#1e1e20"), renderingMode: .alwaysOriginal)
+                self.themeButton.image = themeImage
+            } else {
+                keyWindow.overrideUserInterfaceStyle = .dark
+                let themeImage = UIImage(systemName: "sun.max.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+                self.themeButton.image = themeImage
             }
+            configNavColor(Mode: keyWindow.overrideUserInterfaceStyle)
+        }
+    }
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height + (KIsIPhoneXSeries ? KSafeAreaBottomHeight : 24)
+        textView.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(-keyboardHeight)
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
         }
     }
 
     @objc func keyboardWillHide(notification: Notification) {
-        if let userInfo = notification.userInfo,
-            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
-            // 更新视图的约束或frame
-            UIView.animate(withDuration: duration) {
-                // 将整个视图还原
-                self.view.transform = .identity
-            }
+        textView.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(KIsIPhoneXSeries ? -KSafeAreaBottomHeight : -24)
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
         }
     }
 
+    
+    func scrollToBottom() {
+        let lastsectionIndex = self.tableView.numberOfSections - 1
+        let lastIndexPath = IndexPath(row: 1, section: lastsectionIndex)
+        self.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
+    }
 }
+
 

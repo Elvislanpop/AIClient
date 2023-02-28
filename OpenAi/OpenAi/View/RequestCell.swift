@@ -13,6 +13,7 @@ class RequestCell: UITableViewCell {
         }
     }
     private var contentLab:UILabel!
+    private var tipLab:UILabel!
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let tipLab = UILabel(frame: .zero)
@@ -29,7 +30,7 @@ class RequestCell: UITableViewCell {
         }
         tipLab.layer.cornerRadius = 10
         tipLab.layer.masksToBounds = true
-        
+        self.tipLab = tipLab
         
         let contentLab = UILabel(frame: .zero)
         contentLab.textColor = .black
@@ -58,13 +59,19 @@ class RequestCell: UITableViewCell {
             if self.traitCollection.userInterfaceStyle == .dark {
                 self.backgroundColor = UIColor(hex: "#2e2e39")
                 self.contentLab.textColor = .white
+                self.tipLab.backgroundColor = .white
+                self.tipLab.textColor = .black
             } else {
                 self.backgroundColor = .white
                 self.contentLab.textColor = .black
+                self.tipLab.backgroundColor = .black
+                self.tipLab.textColor = .white
             }
         } else {
             self.backgroundColor = .white
             self.contentLab.textColor = .black
+            self.tipLab.backgroundColor = .black
+            self.tipLab.textColor = .white
 
         }
     }

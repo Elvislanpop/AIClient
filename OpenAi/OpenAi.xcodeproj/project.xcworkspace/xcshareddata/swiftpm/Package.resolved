@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "down",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/johnxnguyen/Down.git",
-      "state" : {
-        "revision" : "0bcd20dc56ad7fd47bbb99a1d2302a8bfa43b6d0",
-        "version" : "0.10.0"
-      }
-    },
-    {
       "identity" : "openaiswift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adamrushy/OpenAISwift.git",

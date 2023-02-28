@@ -24,6 +24,13 @@ extension UIColor {
             alpha: alpha
         )
     }
+    func toImage(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            self.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+        }
+    }
 }
 extension String {
     static func DateToString(from date: Date = Date(), format: String = "yyyy-MM-dd") -> String {
