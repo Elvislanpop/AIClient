@@ -71,6 +71,16 @@ class UserDefaultsManager {
             return nil
         }
     }
+    
+    func isFirstLaunch() -> Bool {
+        if let _ = userDefaults.string(forKey: "appLaunchedBefore") {
+            return false
+        } else {
+            userDefaults.set(true, forKey: "appLaunchedBefore")
+            return true
+        }
+    }
+
 }
 
 

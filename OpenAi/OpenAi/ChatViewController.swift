@@ -7,7 +7,6 @@ class ChatViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     private var themeButton:UIBarButtonItem!
-    private var dataSource:[SaveModel] = []
     lazy var textView: UITextView = {
         let textView = UITextView()
         textView.isScrollEnabled = false
@@ -24,7 +23,7 @@ class ChatViewController: UIViewController {
                 return .white
             }
         }) // 设置背景颜色
-        textView.delegate = self
+        
         return textView
     }()
     
@@ -35,10 +34,21 @@ class ChatViewController: UIViewController {
         let image = UIImage(systemName: "paperplane", withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
         button.rx.tap.withUnretained(self).subscribe(onNext: { _ in
-            
             self.requestOpenAIMessage()
             
         }).disposed(by: disposeBag)
+        
+        // 设置阴影效果
+        button.layer.shadowColor = UIColor(dynamicProvider: { traitCollection in
+            if traitCollection.userInterfaceStyle == .dark {
+                return .black
+            } else {
+                return .white
+            }
+        }).cgColor
+        button.layer.shadowOpacity = 0.8
+        button.layer.shadowRadius = 3
+        button.layer.shadowOffset = CGSize(width: 0, height: 3)
         
         return button
     }()
@@ -65,7 +75,7 @@ class ChatViewController: UIViewController {
         view.backgroundColor = .white // 设置背景颜色
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
+
         configNavColor(Mode: .light)
         
         // 创建带图标的按钮
@@ -79,17 +89,18 @@ class ChatViewController: UIViewController {
         view.addSubview(tableView)
         setupConstraints()
         setupRx()
+        
+        isFirstLaunchRequest()
+        
         if let loadData = UserDefaultsManager.shared.load() {
-            self.dataSource = loadData
             self.tableView.reloadData()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 // 在主线程执行的任务
-                print("5 秒后执行")
+                print("1 秒后执行")
                 self.scrollToBottom()
             }
             
         }
-
 
     }
     func configNavColor(Mode:UIUserInterfaceStyle) {
@@ -132,6 +143,7 @@ class ChatViewController: UIViewController {
                 let color = UITraitCollection.current.userInterfaceStyle == .dark ? UIColor.white : UIColor(named: "LightModeColor") ?? UIColor(hex: "#3c3d4a")
                 let image = UIImage(systemName: "paperplane", withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
                 senderBtn.setImage(image, for: .normal)
+        
                
             }
         } else {
@@ -183,17 +195,25 @@ class ChatViewController: UIViewController {
 
 extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        if self.dataSource.isEmpty {
-            // 如果数据为空，则显示缺省图
-            let noDataView = EmptyDataView(frame: tableView.bounds)
-            tableView.backgroundView = noDataView
-            tableView.separatorStyle = .none
-            return 0
-        } else {
-            // 如果数据不为空，则取消显示缺省图
-            tableView.backgroundView = nil
-            return dataSource.count
+        if let loadData = UserDefaultsManager.shared.load() {
+            if loadData.isEmpty {
+                // 如果数据为空，则显示缺省图
+                let noDataView = EmptyDataView(frame: tableView.bounds)
+                tableView.backgroundView = noDataView
+                tableView.separatorStyle = .none
+                return 0
+            } else {
+                // 如果数据不为空，则取消显示缺省图
+                tableView.backgroundView = nil
+                return loadData.count
+            }
+            
         }
+        // 如果数据为空，则显示缺省图
+        let noDataView = EmptyDataView(frame: tableView.bounds)
+        tableView.backgroundView = noDataView
+        tableView.separatorStyle = .none
+        return 0
 
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -237,18 +257,35 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0
     }
+
+    func reloadNewData(){
+        self.tableView.reloadData()
+        let lastsectionIndex = self.tableView.numberOfSections - 1
+        let lastIndexPath = IndexPath(row: 0, section: lastsectionIndex)
+        self.tableView.scrollToRow(at: lastIndexPath, at: .top, animated: true)
+        
+    }
     
-    
+
+    func scrollToBottom() {
+        let lastsectionIndex = self.tableView.numberOfSections - 1
+        let lastIndexPath = IndexPath(row: 1, section: lastsectionIndex)
+        self.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
+    }
+}
+
+
+extension ChatViewController{
     func requestOpenAIMessage(){
         let openAI = OpenAISwift(authToken: openAiKey)
         self.view.endEditing(true)
         let textViewStr = self.textView.text ?? ""
         self.textView.text = ""
-        let data = SaveModel(question: textViewStr, answer: "正在思考,请稍后...", creatTime: String.DateToString())
+        let data = SaveModel(question: textViewStr, answer: "Thinking, please wait...", creatTime: String.DateToString())
         UserDefaultsManager.shared.save(array: [data])
         self.reloadNewData()
         self.senderBtn.isUserInteractionEnabled = false
-        openAI.sendCompletion(with: textView.text, maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
+        openAI.sendCompletion(with: textViewStr,model: .gpt3(.davinci), maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
             switch result {
             case .success(let success):
                 let text = success.choices.first?.text ?? ""
@@ -271,15 +308,14 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
         }
     }
     
-    func reloadNewData(){
-        self.tableView.reloadData()
-        let lastsectionIndex = self.tableView.numberOfSections - 1
-        let lastIndexPath = IndexPath(row: 0, section: lastsectionIndex)
-        self.tableView.scrollToRow(at: lastIndexPath, at: .top, animated: true)
-        
+    func isFirstLaunchRequest(){
+        if UserDefaultsManager.shared.isFirstLaunch() {
+            let openAI = OpenAISwift(authToken: openAiKey)
+            openAI.sendCompletion(with: "模拟请求",model: .gpt3(.davinci), maxTokens: maxToken) { result in // Result<OpenAI, OpenAIError>
+
+            }
+        }
     }
-    
- 
     
     @objc func toggleTheme() {
         self.view.endEditing(true)
@@ -316,13 +352,5 @@ extension ChatViewController: UITextViewDelegate,UITableViewDelegate,UITableView
             self.view.layoutIfNeeded()
         }
     }
-
     
-    func scrollToBottom() {
-        let lastsectionIndex = self.tableView.numberOfSections - 1
-        let lastIndexPath = IndexPath(row: 1, section: lastsectionIndex)
-        self.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
-    }
 }
-
-
